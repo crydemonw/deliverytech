@@ -1,0 +1,3 @@
+2026-04-07 19:54:41.377557-03:00 jdbc[464]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]*"; SQL statement:
+* [42000-224]
