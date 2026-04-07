@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 @RequiredArgsConstructor
 public class ProdutoServiceImpl implements ProdutoService {
@@ -26,8 +29,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public List<Produto> buscarPorRestaurante(Long restauranteId) {
-        return produtoRepository.findByRestauranteId(restauranteId);
+    public Page<Produto> buscarPorRestaurante(Long restauranteId, Pageable pageable) {
+        return produtoRepository.findByRestauranteId(restauranteId, pageable);
     }
 
     @Override

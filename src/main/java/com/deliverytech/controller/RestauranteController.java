@@ -6,11 +6,15 @@ import com.deliverytech.model.Restaurante;
 import com.deliverytech.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/restaurantes")
@@ -36,10 +40,11 @@ public class RestauranteController {
     }
 
     @GetMapping
-    public List<RestauranteResponse> listarTodos() {
-        return restauranteService.listarTodos().stream()
-                .map(r -> new RestauranteResponse(r.getId(), r.getNome(), r.getCategoria(), r.getTelefone(), r.getTaxaEntrega(), r.getTempoEntregaMinutos(), r.getAtivo()))
-                .collect(Collectors.toList());
+    public Page<RestauranteResponse> listarTodos(Pageable pageable) {
+        Page<Restaurante> restaurantesPaginados = restauranteService.listarTodos(pageable);
+        return restaurantesPaginados.map(r -> new RestauranteResponse(
+                r.getId(), r.getNome(), r.getCategoria(), r.getTelefone(),
+                r.getTaxaEntrega(), r.getTempoEntregaMinutos(), r.getAtivo()));                 
     }
 
     @GetMapping("/{id}")
@@ -51,10 +56,11 @@ public class RestauranteController {
     }
 
     @GetMapping("/categoria/{categoria}")
-    public List<RestauranteResponse> buscarPorCategoria(@PathVariable String categoria) {
-        return restauranteService.buscarPorCategoria(categoria).stream()
-                .map(r -> new RestauranteResponse(r.getId(), r.getNome(), r.getCategoria(), r.getTelefone(), r.getTaxaEntrega(), r.getTempoEntregaMinutos(), r.getAtivo()))
-                .collect(Collectors.toList());
+    public Page<RestauranteResponse> buscarPorCategoria(@PathVariable String categoria, Pageable pageable) {
+        Page<Restaurante> restaurantesPaginados = restauranteService.buscarPorCategoria(categoria, pageable);
+        return restaurantesPaginados.map(r -> new RestauranteResponse(
+                r.getId(), r.getNome(), r.getCategoria(), r.getTelefone(),
+                r.getTaxaEntrega(), r.getTempoEntregaMinutos(), r.getAtivo()));        
     }
 
     @PutMapping("/{id}")

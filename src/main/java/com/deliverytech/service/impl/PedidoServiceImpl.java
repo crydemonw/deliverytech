@@ -7,8 +7,10 @@ import com.deliverytech.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +30,13 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<Pedido> listarPorCliente(Long clienteId) {
-        return pedidoRepository.findByClienteId(clienteId);
+    public Page<Pedido> listarPorCliente(Long clienteId, Pageable pageable) {
+        return pedidoRepository.findByClienteId(clienteId, pageable);
     }
 
     @Override
-    public List<Pedido> listarPorRestaurante(Long restauranteId) {
-        return pedidoRepository.findByRestauranteId(restauranteId);
+    public Page<Pedido> listarPorRestaurante(Long restauranteId, Pageable pageable) {
+        return pedidoRepository.findByRestauranteId(restauranteId, pageable);
     }
 
     @Override

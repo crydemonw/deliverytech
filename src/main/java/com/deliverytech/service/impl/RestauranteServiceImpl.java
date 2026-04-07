@@ -6,8 +6,10 @@ import com.deliverytech.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +28,13 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public List<Restaurante> listarTodos() {
-        return restauranteRepository.findAll();
+    public Page<Restaurante> listarTodos(Pageable pageable) {
+        return restauranteRepository.findAll(pageable);
     }
 
     @Override
-    public List<Restaurante> buscarPorCategoria(String categoria) {
-        return restauranteRepository.findByCategoria(categoria);
+    public Page<Restaurante> buscarPorCategoria(String categoria, Pageable pageable) {
+        return restauranteRepository.findByCategoriaContainingIgnoreCase(categoria, pageable);
     }
 
     @Override

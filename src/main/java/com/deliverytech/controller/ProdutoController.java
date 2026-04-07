@@ -11,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -42,10 +43,10 @@ public class ProdutoController {
     }
 
     @GetMapping("/restaurante/{restauranteId}")
-    public List<ProdutoResponse> listarPorRestaurante(@PathVariable Long restauranteId) {
-        return produtoService.buscarPorRestaurante(restauranteId).stream()
-                .map(p -> new ProdutoResponse(p.getId(), p.getNome(), p.getCategoria(), p.getDescricao(), p.getPreco(), p.getDisponivel()))
-                .collect(Collectors.toList());
+    public Page<ProdutoResponse> listarPorRestaurante(@PathVariable Long restauranteId, Pageable pageable) {
+        Page<Produto> produtosPaginados = produtoService.buscarPorRestaurante(restauranteId, pageable);
+        return produtosPaginados.map(p -> new ProdutoResponse(
+                p.getId(), p.getNome(), p.getCategoria(), p.getDescricao(), p.getPreco(), p.getDisponivel()));
     }
 
     @PutMapping("/{id}")

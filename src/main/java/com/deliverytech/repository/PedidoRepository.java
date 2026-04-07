@@ -4,12 +4,14 @@ import com.deliverytech.model.Pedido;
 import com.deliverytech.model.StatusPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-    List<Pedido> findByClienteId(Long clienteId);
-    List<Pedido> findByRestauranteId(Long restauranteId);
-    List<Pedido> findByStatus(StatusPedido status);
-    List<Pedido> findByDataPedidoBetween(LocalDateTime inicio, LocalDateTime fim);
+    Page<Pedido> findByClienteId(Long clienteId, Pageable pageable);
+    Page<Pedido> findByRestauranteId(Long restauranteId, Pageable pageable);
+    Page<Pedido> findByStatus(StatusPedido status, Pageable pageable);
+    Page<Pedido> findByDataPedidoBetween(LocalDateTime inicio, LocalDateTime fim, Pageable pageable);
 }
