@@ -2,6 +2,7 @@ package com.deliverytech.controller;
 
 import com.deliverytech.dto.request.ClienteRequest;
 import com.deliverytech.dto.response.ClienteResponse;
+import com.deliverytech.exception.EntityNotFoundException;
 import com.deliverytech.model.Cliente;
 import com.deliverytech.service.ClienteService;
 import jakarta.validation.Valid;
@@ -9,13 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -40,7 +42,12 @@ public class ClienteController {
 
         logger.debug("Cliente salvo com ID {}", salvo.getId());
 
-        return ResponseEntity.ok(new ClienteResponse(salvo.getId(), salvo.getNome(), salvo.getEmail(), salvo.getAtivo()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(salvo.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(new ClienteResponse(salvo.getId(), salvo.getNome(), salvo.getEmail(), salvo.getAtivo()));
     }
 
     @GetMapping
@@ -49,6 +56,7 @@ public class ClienteController {
         Page<Cliente> clientesPaginados = clienteService.listarAtivos(pageable);
         return clientesPaginados.map(c -> new ClienteResponse(c.getId(), c.getNome(), c.getEmail(), c.getAtivo()));
     }
+
     @GetMapping("/clientes") // Mapeia a URL http://localhost:8080/clientes
     public List<ClienteResponse> listarClientesNoEndpointSimples() {
         logger.info("Acessando o endpoint simplificado /clientes");
@@ -64,10 +72,7 @@ public class ClienteController {
         return clienteService.buscarPorId(id)
                 .map(c -> new ClienteResponse(c.getId(), c.getNome(), c.getEmail(), c.getAtivo()))
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> {
-                    logger.warn("Cliente com ID {} não encontrado", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Cliente", id));
     }
 
     @PutMapping("/{id}")
