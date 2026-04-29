@@ -6,6 +6,10 @@ import com.deliverytech.model.Role;
 import com.deliverytech.model.Usuario;
 import com.deliverytech.repository.UsuarioRepository;
 import com.deliverytech.security.JwtUtil;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +23,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Autenticação", description = "Endpoints para autenticação e registro de usuários da DeliveryTech")
 public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
@@ -27,6 +32,9 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
+    @Operation(summary = "Registrar usuário", description = "Endpoint para registrar um novo usuário na DeliveryTech, podendo ser cliente ou restaurante")
+    @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida ou email já cadastrado")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email já cadastrado");
@@ -47,6 +55,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Login de usuário", description = "Endpoint para autenticar um usuário existente na DeliveryTech e obter um token JWT")
+    @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso e token JWT retornado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida ou credenciais incorretas")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha()));
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())

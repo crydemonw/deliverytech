@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints Públicos: Acesso liberado para todos
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/health","/info","/swagger-ui.html","/swagger-ui/**", "/api-docs/**", "/h2-console/**", "/actuator/**").permitAll()
+                        .requestMatchers("/health","/info","/custom.css","/swagger-ui.html","/swagger-ui/**", "/api-docs/**", "/h2-console/**", "/actuator/**").permitAll()
 
                         // Endpoints de Cliente: ADMIN pode gerenciar, CLIENTE pode se cadastrar
                         .requestMatchers("/api/clientes","/clientes").hasAnyAuthority("ROLE_ADMIN", "ROLE_CLIENTE")

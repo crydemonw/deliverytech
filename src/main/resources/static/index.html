@@ -3,6 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <title>Teste DeliveryTech API</title>
+    <!-- CSS padrão do Swagger UI -->
+    <link rel="stylesheet" type="text/css"
+      href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Seu CSS customizado -->
+    <link rel="stylesheet" type="text/css" href="./custom.css" />
+    <style>
+        /* Fonte global */
+        body, .swagger-ui {
+        font-family: 'Inter', 'Segoe UI', sans-serif !important;
+        background-color: #f4f6f9;
+        }
+
+        /* Header */
+        .swagger-ui .topbar {
+        background-color: #1e293b;
+        padding: 12px 24px;
+        }
+
+        /* Bloco de info da API */
+        .swagger-ui .info {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px 32px;
+        margin: 24px 0;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .swagger-ui .info .title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1e293b;
+        }
+
+        /* Tags / grupos */
+        .swagger-ui .opblock-tag {
+        background: #fff;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #1e293b;
+        }
+
+        /* Endpoints */
+        .swagger-ui .opblock {
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        margin-bottom: 8px;
+        }
+
+        /* GET */
+        .swagger-ui .opblock.opblock-get {
+        border-left: 4px solid #3b82f6;
+        background: #eff6ff;
+        }
+        .swagger-ui .opblock.opblock-get .opblock-summary-method {
+        background: #3b82f6;
+        border-radius: 6px;
+        }
+
+        /* POST */
+        .swagger-ui .opblock.opblock-post {
+        border-left: 4px solid #22c55e;
+        background: #f0fdf4;
+        }
+        .swagger-ui .opblock.opblock-post .opblock-summary-method {
+        background: #22c55e;
+        border-radius: 6px;
+        }
+
+        /* PUT */
+        .swagger-ui .opblock.opblock-put {
+        border-left: 4px solid #f59e0b;
+        background: #fffbeb;
+        }
+        .swagger-ui .opblock.opblock-put .opblock-summary-method {
+        background: #f59e0b;
+        border-radius: 6px;
+        }
+
+        /* PATCH */
+        .swagger-ui .opblock.opblock-patch {
+        border-left: 4px solid #8b5cf6;
+        background: #f5f3ff;
+        }
+        .swagger-ui .opblock.opblock-patch .opblock-summary-method {
+        background: #8b5cf6;
+        border-radius: 6px;
+        }
+
+        /* DELETE */
+        .swagger-ui .opblock.opblock-delete {
+        border-left: 4px solid #ef4444;
+        background: #fef2f2;
+        }
+        .swagger-ui .opblock.opblock-delete .opblock-summary-method {
+        background: #ef4444;
+        border-radius: 6px;
+        }
+
+        /* Botão Execute */
+        .swagger-ui .btn.execute {
+        background: #3b82f6;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 10px 24px;
+        box-shadow: 0 2px 6px rgba(59,130,246,0.4);
+        }
+
+        .swagger-ui .btn.execute:hover {
+        background: #2563eb;
+        }
+
+        /* Botão Try it out */
+        .swagger-ui .try-out__btn {
+        background: #1e293b;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-weight: 600;
+        }
+
+        /* Botão Authorize */
+        .swagger-ui .btn.authorize {
+        background: #22c55e;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        }
+
+        .swagger-ui .btn.authorize svg {
+        fill: #fff;
+        }
+
+        /* Inputs */
+        .swagger-ui input[type=text],
+        .swagger-ui input[type=password],
+        .swagger-ui textarea {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 14px;
+        transition: border 0.2s;
+        }
+
+        .swagger-ui input[type=text]:focus,
+        .swagger-ui textarea:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+
+        /* Resposta */
+        .swagger-ui .microlight {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        font-size: 13px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
 </head>
 <body>
     <h1>🔐 Login</h1>

@@ -5,6 +5,10 @@ import com.deliverytech.dto.response.ClienteResponse;
 import com.deliverytech.exception.EntityNotFoundException;
 import com.deliverytech.model.Cliente;
 import com.deliverytech.service.ClienteService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +26,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("/api/clientes")
 @RequiredArgsConstructor
+
+@Tag(name = "Clientes", description = "Endpoints para gerenciamento de clientes da DeliveryTech")
 public class ClienteController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
@@ -29,6 +35,9 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @PostMapping
+    @Operation(summary = "Cadastrar cliente", description = "Endpoint para cadastrar um novo cliente na DeliveryTech")
+    @ApiResponse(responseCode = "201", description = "Cliente cadastrado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")    
     public ResponseEntity<ClienteResponse> cadastrar(@Valid @RequestBody ClienteRequest request) {
         logger.info("Cadastro de cliente iniciado: {}", request.getEmail());
 
@@ -51,6 +60,9 @@ public class ClienteController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar clientes", description = "Endpoint para listar clientes ativos de forma paginada")
+    @ApiResponse(responseCode = "200", description = "Clientes listados com sucesso")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public Page<ClienteResponse> listar(Pageable pageable) {
         logger.info("Listando todos os clientes ativos de forma paginada");
         Page<Cliente> clientesPaginados = clienteService.listarAtivos(pageable);
@@ -58,6 +70,9 @@ public class ClienteController {
     }
 
     @GetMapping("/clientes") // Mapeia a URL http://localhost:8080/clientes
+    @Operation(summary = "Listar clientes (endpoint simplificado)", description = "Endpoint para listar clientes ativos sem paginação")
+    @ApiResponse(responseCode = "200", description = "Clientes listados com sucesso")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public List<ClienteResponse> listarClientesNoEndpointSimples() {
         logger.info("Acessando o endpoint simplificado /clientes");
 
@@ -67,6 +82,10 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar cliente por ID", description = "Endpoint para buscar um cliente ativo pelo seu ID")
+    @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<ClienteResponse> buscar(@PathVariable Long id) {
         logger.info("Buscando cliente com ID: {}", id);
         return clienteService.buscarPorId(id)
@@ -76,6 +95,10 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar cliente", description = "Endpoint para atualizar os dados de um cliente ativo pelo seu ID")
+    @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<ClienteResponse> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteRequest request) {
         logger.info("Atualizando cliente ID: {}", id);
 
@@ -88,8 +111,12 @@ public class ClienteController {
 
         return ResponseEntity.ok(new ClienteResponse(salvo.getId(), salvo.getNome(), salvo.getEmail(), salvo.getAtivo()));
     }
-
+        
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Ativar/Desativar cliente", description = "Endpoint para ativar ou desativar um cliente pelo seu ID")
+    @ApiResponse(responseCode = "204", description = "Status do cliente alterado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<Void> ativarDesativar(@PathVariable Long id) {
         logger.info("Alterando status do cliente ID: {}", id);
         clienteService.ativarDesativar(id);
@@ -97,6 +124,8 @@ public class ClienteController {
     }
 
     @GetMapping("/status")
+    @Operation(summary = "Verificar status da API", description = "Endpoint para verificar se a API está online e obter informações de diagnóstico")
+    @ApiResponse(responseCode = "200", description = "API está online") 
     public ResponseEntity<String> status() {
         logger.debug("Status endpoint acessado");
         int cpuCores = Runtime.getRuntime().availableProcessors();

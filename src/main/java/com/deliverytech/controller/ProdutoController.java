@@ -7,6 +7,10 @@ import com.deliverytech.model.Produto;
 import com.deliverytech.model.Restaurante;
 import com.deliverytech.service.ProdutoService;
 import com.deliverytech.service.RestauranteService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +26,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("/api/produtos")
 @RequiredArgsConstructor
+@Tag(name = "Produtos", description = "Endpoints para gerenciamento de produtos da DeliveryTech")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
     private final RestauranteService restauranteService;
 
     @PostMapping
+    @Operation (summary = "Cadastrar produto", description = "Endpoint para cadastrar um novo produto em um restaurante da DeliveryTech")
+    @ApiResponse(responseCode = "201", description = "Produto cadastrado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<ProdutoResponse> cadastrar(@Valid @RequestBody ProdutoRequest request) {
         Restaurante restaurante = restauranteService.buscarPorId(request.getRestauranteId())
                 .orElseThrow(() -> new RuntimeException("Restaurante não encontrado"));
@@ -53,6 +61,9 @@ public class ProdutoController {
     }
 
     @GetMapping("/restaurante/{restauranteId}")
+    @Operation(summary = "Listar produtos por restaurante", description = "Endpoint para listar os produtos ativos de um restaurante específico de forma paginada")
+    @ApiResponse(responseCode = "200", description = "Produtos listados com sucesso")
+    @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
     public Page<ProdutoResponse> listarPorRestaurante(@PathVariable Long restauranteId, Pageable pageable) {
         // Verifica se o restaurante existe antes de buscar os produtos
         if(restauranteService.buscarPorId(restauranteId).isEmpty()) {
@@ -65,6 +76,10 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar produto", description = "Endpoint para atualizar os dados de um produto ativo pelo seu ID")
+    @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso") 
+    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<ProdutoResponse> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoRequest request) {
         Produto atualizado = Produto.builder()
                 .nome(request.getNome())
@@ -77,6 +92,10 @@ public class ProdutoController {
     }
 
     @PatchMapping("/{id}/disponibilidade")
+    @Operation(summary = "Alterar disponibilidade do produto", description = "Endpoint para alterar a disponibilidade de um produto ativo pelo seu ID")
+    @ApiResponse(responseCode = "204", description = "Disponibilidade do produto alterada com sucesso")
+    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
     public ResponseEntity<Void> alterarDisponibilidade(@PathVariable Long id, @RequestParam boolean disponivel) {
         produtoService.alterarDisponibilidade(id, disponivel);
         return ResponseEntity.noContent().build();
