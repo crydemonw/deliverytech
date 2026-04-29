@@ -145,14 +145,13 @@ delivery-api/
 
 
 
-Bash
-Copiar
 # Clone o repositório
+```
 git clone https://github.com/crydemonw/deliverytech.git
 cd deliverytech
-
+```
 # Roda com o perfil dev (padrão)
-./mvnw spring-boot:run
+```./mvnw spring-boot:run´```
 
 
 
@@ -163,19 +162,17 @@ cd deliverytech
 
 
 
-Bash
-Copiar
 # Build e start de todos os serviços
-docker-compose up --build
+```docker-compose up --build```
 
 # Em segundo plano
-docker-compose up --build -d
+```docker-compose up --build -d```
 
 # Parar e remover containers
-docker-compose down
+```docker-compose down```
 
 # Parar, remover containers e volumes (limpa dados Redis)
-docker-compose down -v
+```docker-compose down -v```
 
 
 
@@ -186,59 +183,55 @@ docker-compose down -v
 
 
 
-Bash
-Copiar
-# ─── Build ─────────────────────────────────────────────────
-# Compila, testa e empacota o JAR
-./mvnw clean package
+## Build 
+### Compila, testa e empacota o JAR
+```./mvnw clean package```
 
-# Empacota sem rodar os testes
-./mvnw clean package -DskipTests
+### Empacota sem rodar os testes
+```./mvnw clean package -DskipTests```
 
-# Apenas compila (sem empacotar)
-./mvnw clean compile
+### Apenas compila (sem empacotar)
+```./mvnw clean compile```
 
-# ─── Execução ──────────────────────────────────────────────
-# Roda com perfil dev (padrão definido no application.yml)
-./mvnw spring-boot:run
+## Execução 
+### Roda com perfil dev (padrão definido no application.yml)
+```./mvnw spring-boot:run```
 
-# Roda explicitamente com perfil dev
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+### Roda explicitamente com perfil dev
+```./mvnw spring-boot:run -Dspring-boot.run.profiles=dev```
 
-# Roda com perfil prod (requer variáveis de ambiente configuradas)
-./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
+### Roda com perfil prod (requer variáveis de ambiente configuradas)
+```./mvnw spring-boot:run -Dspring-boot.run.profiles=prod```
 
-# ─── Testes ────────────────────────────────────────────────
-# Roda todos os testes (usa application-test.yml automaticamente)
-./mvnw test
+## Testes
+### Roda todos os testes (usa application-test.yml automaticamente)
+```./mvnw test```
 
-# Roda uma classe de teste específica
-./mvnw test -Dtest=PedidoServiceTest
+### Roda uma classe de teste específica
+```./mvnw test -Dtest=PedidoServiceTest```
 
-# Roda um método específico
-./mvnw test -Dtest=PedidoServiceTest#deveCriarPedidoComSucesso
+### Roda um método específico
+```./mvnw test -Dtest=PedidoServiceTest#deveCriarPedidoComSucesso```
 
 # Gera relatório de testes em target/surefire-reports/
-./mvnw surefire-report:report
+```./mvnw surefire-report:report```
 
-# ─── Dependências ──────────────────────────────────────────
-# Lista as dependências do projeto em árvore
-./mvnw dependency:tree
+## Dependências 
+### Lista as dependências do projeto em árvore
+```./mvnw dependency:tree```
 
-# Verifica se há atualizações de dependências disponíveis
-./mvnw versions:display-dependency-updates
+### Verifica se há atualizações de dependências disponíveis
+```./mvnw versions:display-dependency-updates```
 
-# ─── Utilitários ───────────────────────────────────────────
-# Valida o pom.xml
-./mvnw validate
+## Utilitários
+### Valida o pom.xml
+```./mvnw validate```
 
-# Gera o JAR e o instala no repositório local (~/.m2)
-./mvnw install
+### Gera o JAR e o instala no repositório local (~/.m2)
+```./mvnw install```
 
-# Exibe as propriedades efetivas do projeto
-./mvnw help:effective-pom
-
-
+### Exibe as propriedades efetivas do projeto
+```./mvnw help:effective-pom```
 
 
 ---
@@ -264,9 +257,8 @@ A API utiliza **JWT Bearer Token**. Fluxo básico:
 
 
 
-Bash
-Copiar
-# 1. Registrar usuário
+### 1. Registrar usuário 
+```
 POST /api/auth/register
 Content-Type: application/json
 
@@ -276,8 +268,9 @@ Content-Type: application/json
   "senha": "senha123",
   "perfil": "CLIENTE"
 }
-
-# 2. Fazer login e obter o token
+```
+### 2. Fazer login e obter o token
+```
 POST /api/auth/login
 Content-Type: application/json
 
@@ -285,16 +278,18 @@ Content-Type: application/json
   "email": "william@email.com",
   "senha": "senha123"
 }
-
-# Resposta:
+```
+#### Resposta:
+```
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
-
-# 3. Usar o token nas requisições protegidas
+```
+### 3. Usar o token nas requisições protegidas
+```
 GET /api/pedidos
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
+```
 
 
 
@@ -317,15 +312,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ### Dockerfile
 
 
-
-Dockerfile
-Copiar
+```
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY target/delivery-api-1.0.0.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
+```
 
 ---
 
@@ -346,19 +339,17 @@ na branch `main`:
 
 
 
-Bash
-Copiar
 # Fork o repositório e clone localmente
-git clone https://github.com/crydemonw/deliverytech.git
+```git clone https://github.com/crydemonw/deliverytech.git```
 
 # Crie uma branch para sua feature
-git checkout -b feature/nome-da-feature
+```git checkout -b feature/nome-da-feature```
 
 # Faça suas alterações e commit
-git commit -m "feat: descrição da funcionalidade"
+```git commit -m "feat: descrição da funcionalidade"```
 
 # Suba a branch
-git push origin feature/nome-da-feature
+```git push origin feature/nome-da-feature```
 
 # Abra um Pull Request no GitHub
 
